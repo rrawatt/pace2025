@@ -42,20 +42,15 @@ unordered_set<int> optimized_greedy_dominating_set(const vector<vector<int>> &ad
     unordered_set<int> dominating_set;
     unordered_set<int> uncovered_vertices;
 
-    // Initially, all vertices are uncovered
     for (int v = 1; v <= n; ++v) {
         uncovered_vertices.insert(v);
     }
 
-    // Vector to store the number of uncovered vertices each vertex covers
     vector<int> cover_count(n + 1, 0);
-
-    // Greedily select vertices to cover the most uncovered vertices
     while (!uncovered_vertices.empty()) {
         int best_vertex = -1;
         int best_cover = -1;
 
-        // Recalculate the cover count for each uncovered vertex
         for (int v : uncovered_vertices) {
             int count = 0;
             for (int neighbor : adj_list[v]) {
@@ -71,11 +66,9 @@ unordered_set<int> optimized_greedy_dominating_set(const vector<vector<int>> &ad
             }
         }
 
-        // Add the best vertex to the dominating set
         dominating_set.insert(best_vertex);
         uncovered_vertices.erase(best_vertex);
 
-        // Mark the best vertex and its neighbors as covered
         for (int neighbor : adj_list[best_vertex]) {
             uncovered_vertices.erase(neighbor);
         }
@@ -110,14 +103,11 @@ int main(int argc, char *argv[]) {
 
     unordered_set<int> dominating_set = optimized_greedy_dominating_set(adj_list, n);
 
-    // Record the end time and calculate the duration
     auto end_time = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(end_time - start_time);
 
-    // Write the solution to the output file
     write_solution(solution_filename, dominating_set);
 
-    // Output the time taken for the algorithm
     cout << "Time taken: " << duration.count() << " microseconds." << endl;
 
     return 0;
